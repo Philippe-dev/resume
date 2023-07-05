@@ -26,9 +26,7 @@ class Config extends dcNsProcess
     public static function init(): bool
     {
         // limit to backend permissions
-        static::$init = My::checkContext(My::CONFIG);
-
-        if (!static::$init) {
+        if (!self::status(My::checkContext(My::CONFIG))) {
             return false;
         }
 
@@ -45,7 +43,7 @@ class Config extends dcNsProcess
         // Load contextual help
         dcCore::app()->themes->loadModuleL10Nresources(My::id(), dcCore::app()->lang);
 
-        $resume_default_image_url = $theme_url . '/img/profile.jpg';
+        dcCore::app()->resume_default_image_url = $theme_url . '/img/profile.jpg';
 
         $style = dcCore::app()->blog->settings->themes->get(dcCore::app()->blog->settings->system->theme . '_style');
         $style = $style ? (unserialize($style) ?: []) : [];
@@ -54,7 +52,7 @@ class Config extends dcNsProcess
             $style = [];
         }
         if (!isset($style['resume_user_image']) || empty($style['resume_user_image'])) {
-            $style['resume_user_image'] = $resume_default_image_url;
+            $style['resume_user_image'] = dcCore::app()->resume_default_image_url;
         }
 
         if (!isset($style['main_color'])) {
@@ -92,7 +90,7 @@ class Config extends dcNsProcess
 
         dcCore::app()->admin->conf_tab = $_POST['conf_tab'] ?? 'presentation';
 
-        return self::$init;
+        return self::status();
     }
 
     /**
@@ -100,7 +98,7 @@ class Config extends dcNsProcess
      */
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 
@@ -112,7 +110,7 @@ class Config extends dcNsProcess
                     if (!empty($_POST['resume_user_image'])) {
                         $style['resume_user_image'] = $_POST['resume_user_image'];
                     } else {
-                        $style['resume_user_image'] = $resume_default_image_url;
+                        $style['resume_user_image'] = dcCore::app()->resume_default_image_url;
                     }
                     $style['main_color'] = $_POST['main_color'];
 
@@ -171,7 +169,7 @@ class Config extends dcNsProcess
      */
     public static function render(): void
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return;
         }
 
