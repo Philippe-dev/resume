@@ -17,6 +17,7 @@ namespace Dotclear\Theme\resume;
 use dcCore;
 use Dotclear\Core\Process;
 use Dotclear\Core\Backend\Page;
+use Dotclear\Core\Backend\Notices;
 use Exception;
 use form;
 
@@ -148,7 +149,7 @@ class Config extends Process
                 // Template cache reset
                 dcCore::app()->emptyTemplatesCache();
 
-                Page::success(__('Theme configuration upgraded.'), true, true);
+                Notices::success(__('Theme configuration upgraded.'), true, true);
             } catch (Exception $e) {
                 dcCore::app()->error->add($e->getMessage());
             }
