@@ -11,10 +11,17 @@
     justify-content: space-evenly;
 }
 
-.box img {
-    object-fit: cover
+#theme_config .box img {
+    object-fit: cover;
+    background: var(--theme-img-background);
+	box-shadow: 0.9px 0.9px 2.2px rgba(0, 0, 0, 0.07), 2.1px 2.1px 5.3px rgba(0, 0, 0, 0.05), 4px 4px 10px rgba(0, 0, 0, 0.042), 7.1px 7.1px 17.9px rgba(0, 0, 0, 0.035), 13.4px 13.4px 33.4px rgba(0, 0, 0, 0.028), 32px 32px 80px rgba(0, 0, 0, 0.02);
+	border: 1px solid var(--theme-img-border);
 }
 
-.svg-inline--fa {
+#theme_config .svg-inline--fa {
     font-size: 2em
+}
+
+#theme_config .box.theme {
+	border: 0;
 }
