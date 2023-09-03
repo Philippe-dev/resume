@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Theme\resume;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Process;
 use Dotclear\Core\Backend\Page;
 
@@ -31,8 +31,8 @@ class Backend extends Process
             return false;
         }
 
-        dcCore::app()->addBehavior('adminPageHTMLHead', function () {
-            if (dcCore::app()->blog->settings->system->theme !== My::id()) {
+        App::behavior()->addBehavior('adminPageHTMLHead', function () {
+            if (App::blog()->settings->system->theme !== My::id()) {
                 return;
             }
 
@@ -42,16 +42,16 @@ class Backend extends Process
             '<script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>' . "\n" .
             My::cssLoad('admin.css') . "\n" ;
 
-            dcCore::app()->auth->user_prefs->addWorkspace('accessibility');
-            if (!dcCore::app()->auth->user_prefs->accessibility->nodragdrop) {
+            App::auth()->user_prefs->addWorkspace('accessibility');
+            if (!App::auth()->user_prefs->accessibility->nodragdrop) {
                 echo
                 Page::jsLoad('js/jquery/jquery-ui.custom.js') .
                 Page::jsLoad('js/jquery/jquery.ui.touch-punch.js');
             }
         });
 
-        dcCore::app()->addBehavior('adminPageHTTPHeaderCSP', function ($csp) {
-            if (dcCore::app()->blog->settings->system->theme !== My::id()) {
+        App::behavior()->addBehavior('adminPageHTTPHeaderCSP', function ($csp) {
+            if (App::blog()->settings->system->theme !== My::id()) {
                 return;
             }
 

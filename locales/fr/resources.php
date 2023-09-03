@@ -6,7 +6,4 @@
  * @copyright Olivier Meunier & Association Dotclear
  * @copyright GPL-2.0-only
  */
-
-if (!isset(dcCore::app()->resources['help']['resume'])) {
-    dcCore::app()->resources['help']['resume'] = dirname(__FILE__) . '/help/help.html';
-}
+\Dotclear\App::backend()->resources->set('help', 'resume', __DIR__ . '/help/help.html');

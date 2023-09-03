@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace Dotclear\Theme\resume;
 
 use ArrayObject;
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Process;
 use Dotclear\Helper\Html\Html;
 use Dotclear\Helper\Network\Http;
@@ -37,17 +37,17 @@ class Frontend extends Process
         My::l10n('main');
 
         # Templates
-        dcCore::app()->tpl->addValue('ResumeSimpleMenu', [self::class, 'resumeSimpleMenu']);
-        dcCore::app()->tpl->addValue('resumeUserColors', [self::class, 'resumeUserColors']);
-        dcCore::app()->tpl->addValue('resumeUserImageSrc', [self::class, 'resumeUserImageSrc']);
-        dcCore::app()->tpl->addValue('resumeSocialLinks', [self::class, 'resumeSocialLinks']);
+        App::frontend()->tpl->addValue('ResumeSimpleMenu', [self::class, 'resumeSimpleMenu']);
+        App::frontend()->tpl->addValue('resumeUserColors', [self::class, 'resumeUserColors']);
+        App::frontend()->tpl->addValue('resumeUserImageSrc', [self::class, 'resumeUserImageSrc']);
+        App::frontend()->tpl->addValue('resumeSocialLinks', [self::class, 'resumeSocialLinks']);
 
         return true;
     }
 
     public static function resumeSimpleMenu(ArrayObject $attr): string
     {
-        if (!(bool) dcCore::app()->blog->settings->system->simpleMenu_active) {
+        if (!(bool) App::blog()->settings->system->simpleMenu_active) {
             return '';
         }
 
@@ -70,18 +70,18 @@ class Frontend extends Process
     {
         $ret = '';
 
-        if (!(bool) dcCore::app()->blog->settings->system->simpleMenu_active) {
+        if (!(bool) App::blog()->settings->system->simpleMenu_active) {
             return $ret;
         }
 
-        $menu = dcCore::app()->blog->settings->system->simpleMenu;
+        $menu = App::blog()->settings->system->simpleMenu;
         if (is_array($menu)) {
             // Current relative URL
             $url     = $_SERVER['REQUEST_URI'];
             $abs_url = Http::getHost() . $url;
 
             // Home recognition var
-            $home_url       = Html::stripHostURL(dcCore::app()->blog->url);
+            $home_url       = Html::stripHostURL(App::blog()->url);
             $home_directory = dirname($home_url);
             if ($home_directory != '/') {
                 $home_directory = $home_directory . '/';
@@ -139,7 +139,7 @@ class Frontend extends Process
                 ]);
 
                 # --BEHAVIOR-- publicSimpleMenuItem
-                dcCore::app()->callBehavior('publicSimpleMenuItem', $i, $item);
+                App::behavior()->callBehavior('publicSimpleMenuItem', $i, $item);
 
                 $ret .= '<li class="nav-item li' . ($i + 1) .
                     ($item['active'] ? ' active' : '') .
@@ -170,7 +170,7 @@ class Frontend extends Process
 
     public static function resumeUserColorsHelper()
     {
-        $style = dcCore::app()->blog->settings->themes->get(dcCore::app()->blog->settings->system->theme . '_style');
+        $style = App::blog()->settings->themes->get(App::blog()->settings->system->theme . '_style');
         $style = $style ? (unserialize($style) ?: []) : [];
 
         if (!is_array($style)) {
@@ -199,7 +199,7 @@ class Frontend extends Process
     {
         $resume_default_image_url = My::fileURL('/img/profile.jpg');
 
-        $style = dcCore::app()->blog->settings->themes->get(dcCore::app()->blog->settings->system->theme . '_style');
+        $style = App::blog()->settings->themes->get(App::blog()->settings->system->theme . '_style');
         $style = $style ? (unserialize($style) ?: []) : [];
 
         if (!is_array($style)) {
@@ -221,7 +221,7 @@ class Frontend extends Process
         # Social media links
         $res = '';
 
-        $style = dcCore::app()->blog->settings->themes->get(dcCore::app()->blog->settings->system->theme . '_stickers');
+        $style = App::blog()->settings->themes->get(App::blog()->settings->system->theme . '_stickers');
 
         if ($style === null) {
             $default = true;
