@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Dotclear\Theme\resume;
 
-use Dotclear\Core\Utils;
 use Dotclear\App;
 use Dotclear\Core\Process;
 use Dotclear\Core\Backend\Page;
@@ -148,7 +147,7 @@ class Config extends Process
                 App::blog()->triggerBlog();
 
                 // Template cache reset
-                Utils::emptyTemplatesCache();
+                App::cache()->emptyTemplatesCache();
 
                 Notices::message(__('Theme configuration upgraded.'), true, true);
             } catch (Exception $e) {
