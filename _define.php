@@ -5,9 +5,7 @@
  * @package Dotclear
  * @subpackage Themes
  *
- * @author Start Bootstrap and Philippe aka amalgame
- *
- * @copyright Philippe Hénaff philippe@dissitou.org
+ * @author Philippe aka amalgame and contributors
  * @copyright GPL-2.0
  */
 $this->registerModule(
