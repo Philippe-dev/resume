@@ -15,4 +15,4 @@ namespace Dotclear\Theme\resume;
 
 use Dotclear\App;
 
-App::backend()->resources->set('help', 'resume', __DIR__ . '/help/help.html');
+App::backend()->resources()->set('help', 'resume', __DIR__ . '/help/help.html');
