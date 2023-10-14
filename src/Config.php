@@ -171,7 +171,7 @@ class Config extends Process
 
         echo '<div class="multi-part" id="themes-list' . (App::backend()->conf_tab === 'presentation' ? '' : '-presentation') . '" title="' . __('Presentation') . '">';
 
-        echo '<form id="theme_config" action="' . App::backend()->url->get('admin.blog.theme', ['conf' => '1']) .
+        echo '<form id="theme_config" action="' . App::backend()->url()->get('admin.blog.theme', ['conf' => '1']) .
             '" method="post" enctype="multipart/form-data">';
 
         echo '<div class="fieldset">';
@@ -211,7 +211,7 @@ class Config extends Process
         echo '</div>'; // Close tab
 
         echo '<div class="multi-part" id="themes-list' . (App::backend()->conf_tab === 'links' ? '' : '-links') . '" title="' . __('Stickers') . '">';
-        echo '<form id="theme_config" action="' . App::backend()->url->get('admin.blog.theme', ['conf' => '1']) .
+        echo '<form id="theme_config" action="' . App::backend()->url()->get('admin.blog.theme', ['conf' => '1']) .
             '" method="post" enctype="multipart/form-data">';
 
         echo '<div class="fieldset">';
