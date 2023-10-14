@@ -35,10 +35,10 @@ class Frontend extends Process
         My::l10n('main');
 
         # Templates
-        App::frontend()->tpl->addValue('ResumeSimpleMenu', [self::class, 'resumeSimpleMenu']);
-        App::frontend()->tpl->addValue('resumeUserColors', [self::class, 'resumeUserColors']);
-        App::frontend()->tpl->addValue('resumeUserImageSrc', [self::class, 'resumeUserImageSrc']);
-        App::frontend()->tpl->addValue('resumeSocialLinks', [self::class, 'resumeSocialLinks']);
+        App::frontend()->template()->addValue('ResumeSimpleMenu', [self::class, 'resumeSimpleMenu']);
+        App::frontend()->template()->addValue('resumeUserColors', [self::class, 'resumeUserColors']);
+        App::frontend()->template()->addValue('resumeUserImageSrc', [self::class, 'resumeUserImageSrc']);
+        App::frontend()->template()->addValue('resumeSocialLinks', [self::class, 'resumeSocialLinks']);
 
         return true;
     }
