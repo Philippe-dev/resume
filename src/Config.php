@@ -182,7 +182,7 @@ class Config extends Process
 
         echo '<p> ' .
         '<img id="resume_user_image_src" alt="' . __('Image URL:') . ' ' . App::backend()->style['resume_user_image'] .
-         '" src="' . App::backend()->style['resume_user_image'] . '" class="img-profile" />' .
+         '" src="' . App::backend()->style['resume_user_image'] . '" class="img-profile">' .
          '</p>';
 
         echo '<p class="resume-buttons"><button type="button" id="resume_user_image_selector">' . __('Change') . '</button>' .
@@ -202,8 +202,8 @@ class Config extends Process
 
         echo '</div>'; // Close fieldset
 
-        echo '<p><input type="hidden" name="conf_tab" value="presentation" /></p>';
-        echo '<p class="clear"><input type="submit" value="' . __('Save') . '" />' . App::nonce()->getFormNonce() . '</p>';
+        echo '<p><input type="hidden" name="conf_tab" value="presentation"></p>';
+        echo '<p class="clear"><input type="submit" value="' . __('Save') . '">' . App::nonce()->getFormNonce() . '</p>';
         echo form::hidden(['theme-url'], App::backend()->theme_url);
 
         echo '</form>';
@@ -252,8 +252,8 @@ class Config extends Process
             '</tbody>' .
             '</table></div>';
         echo '</div>'; // Close fieldset
-        echo '<p><input type="hidden" name="conf_tab" value="links" /></p>';
-        echo '<p class="clear">' . form::hidden('ds_order', '') . '<input type="submit" value="' . __('Save') . '" />' . App::nonce()->getFormNonce() . '</p>';
+        echo '<p><input type="hidden" name="conf_tab" value="links"></p>';
+        echo '<p class="clear">' . form::hidden('ds_order', '') . '<input type="submit" value="' . __('Save') . '">' . App::nonce()->getFormNonce() . '</p>';
         echo '</form>';
 
         echo '</div>'; // Close tab

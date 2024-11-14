@@ -242,9 +242,9 @@ class Frontend extends Process
     protected static function setSocialLink($position, $last, $label, $url, $image)
     {
         return
-            '<a class="social-icon" title="' . $label . '" href="' . $url . '"><span class="sr-only">' . $label . '</span>' .
+            '<li><a class="social-icon" title="' . $label . '" href="' . $url . '"><span class="sr-only">' . $label . '</span>' .
             '<i class="' . $image . '"></i>' .
-            '</a>' . "\n";
+            '</a></li>' . "\n";
     }
 
     protected static function cleanSocialLinks($style)

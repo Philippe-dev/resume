@@ -1,5 +1,5 @@
 'use strict';
-$(function () {
+dotclear.ready(() => {
     $('#media-select-cancel').on('click', function () {
         window.close();
     });

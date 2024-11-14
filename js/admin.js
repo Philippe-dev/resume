@@ -1,4 +1,4 @@
-$(function () {
+dotclear.ready(() => {
     // user image
     $('#resume_user_image_selector').on('click', function (e) {
         window.open(
