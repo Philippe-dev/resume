@@ -98,7 +98,7 @@
   font-family: 'Saira Extra Condensed';
   font-style: normal;
   font-weight: 700;
-  src: url('../fonts/saira-extra-condensed-v13-latin-700.woff2') format('woff2');
+  src: url(index.php?tf=../fonts/saira-extra-condensed-v13-latin-700.woff2) format('woff2');
 }
 
 body {

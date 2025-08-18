@@ -12,11 +12,13 @@ $this->registerModule(
     'Resume',
     'A simple Bootstrap 5 blog theme',
     'Philippe aka amalgame and contributors',
-    '4.4',
+    '4.5',
     [
-        'requires'          => [['core', '2.28']],
+        'date'              => '2025-08-18T00:00:13+0100',
+        'requires'          => [['core', '2.35']],
         'standalone_config' => true,
         'type'              => 'theme',
         'tplset'            => 'dotty',
+        'overload'          => true,
     ]
 );
