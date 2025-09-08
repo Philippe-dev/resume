@@ -14,12 +14,14 @@ namespace Dotclear\Theme\resume;
 
 use ArrayObject;
 use Dotclear\App;
-use Dotclear\Core\Process;
+use Dotclear\Helper\Process\TraitProcess;
 use Dotclear\Helper\Html\Html;
 use Dotclear\Helper\Network\Http;
 
-class Frontend extends Process
+class Frontend
 {
+    use TraitProcess;
+    
     public static function init(): bool
     {
         return self::status(My::checkContext(My::FRONTEND));

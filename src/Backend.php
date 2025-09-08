@@ -13,11 +13,13 @@ declare(strict_types=1);
 namespace Dotclear\Theme\resume;
 
 use Dotclear\App;
-use Dotclear\Core\Process;
+use Dotclear\Helper\Process\TraitProcess;
 use Dotclear\Core\Backend\Page;
 
-class Backend extends Process
+class Backend
 {
+    use TraitProcess;
+    
     public static function init(): bool
     {
         return self::status(My::checkContext(My::BACKEND));
