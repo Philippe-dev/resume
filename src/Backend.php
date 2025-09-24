@@ -14,7 +14,6 @@ namespace Dotclear\Theme\resume;
 
 use Dotclear\App;
 use Dotclear\Helper\Process\TraitProcess;
-use Dotclear\Core\Backend\Page;
 
 class Backend
 {
@@ -45,8 +44,8 @@ class Backend
             App::auth()->user_prefs->addWorkspace('accessibility');
             if (!App::auth()->user_prefs->accessibility->nodragdrop) {
                 echo
-                Page::jsLoad('js/jquery/jquery-ui.custom.js') .
-                Page::jsLoad('js/jquery/jquery.ui.touch-punch.js');
+                App::backend()->page()->jsLoad('js/jquery/jquery-ui.custom.js') .
+                App::backend()->page()->jsLoad('js/jquery/jquery.ui.touch-punch.js');
             }
         });
 

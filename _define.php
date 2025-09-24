@@ -12,9 +12,9 @@ $this->registerModule(
     'Resume',
     'A simple Bootstrap 5 blog theme',
     'Philippe aka amalgame and contributors',
-    '4.6',
+    '4.7',
     [
-        'date'        => '2025-09-08T00:00:08+0100',
+        'date'        => '2025-09-24T00:00:08+0100',
         'requires'    => [['core', '2.36']],
         'standalone_config' => true,
         'type'              => 'theme',

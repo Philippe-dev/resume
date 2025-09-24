@@ -14,8 +14,6 @@ namespace Dotclear\Theme\resume;
 
 use Dotclear\App;
 use Dotclear\Helper\Process\TraitProcess;
-use Dotclear\Core\Backend\Page;
-use Dotclear\Core\Backend\Notices;
 use Exception;
 use form;
 
@@ -149,7 +147,7 @@ class Config
                 // Template cache reset
                 App::cache()->emptyTemplatesCache();
 
-                Notices::message(__('Theme configuration upgraded.'), true, true);
+                App::backend()->notices()->message(__('Theme configuration upgraded.'), true, true);
             } catch (Exception $e) {
                 App::error()->add($e->getMessage());
             }
@@ -259,7 +257,7 @@ class Config
         echo '</form>';
 
         echo '</div>'; // Close tab
-        Page::helpBlock('resume');
+        App::backend()->page()->helpBlock('resume');
 
         // Legacy mode
         if (!App::backend()->standalone_config) {
