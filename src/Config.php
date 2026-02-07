@@ -37,7 +37,7 @@ class Config
 {
     use TraitProcess;
 
-    
+    /*a:14:{i:0;a:3:{s:5:"label";s:8:"Mastodon";s:3:"url";s:28:"https://piaille.fr/@dissitou";s:5:"image";s:15:"fab fa-mastodon";}i:1;a:3:{s:5:"label";s:0:"";s:3:"url";s:0:"";s:5:"image";s:15:"fab fa-diaspora";}i:2;a:3:{s:5:"label";s:9:"Instagram";s:3:"url";s:0:"";s:5:"image";s:16:"fab fa-instagram";}i:3;a:3:{s:5:"label";s:6:"GitHub";s:3:"url";s:31:"https://github.com/philippe-dev";s:5:"image";s:13:"fab fa-github";}i:4;a:3:{s:5:"label";s:11:"Syndication";s:3:"url";s:34:"https://www.dissitou.org/feed/atom";s:5:"image";s:10:"fas fa-rss";}i:5;a:3:{s:5:"label";s:6:"twitch";s:3:"url";s:1:"#";s:5:"image";s:13:"fab fa-twitch";}i:6;a:3:{s:5:"label";s:0:"";s:3:"url";s:0:"";s:5:"image";s:18:"fab fa-linkedin-in";}i:7;a:3:{s:5:"label";s:0:"";s:3:"url";s:0:"";s:5:"image";s:13:"fab fa-gitlab";}i:8;a:3:{s:5:"label";s:0:"";s:3:"url";s:0:"";s:5:"image";s:14:"fab fa-twitter";}i:9;a:3:{s:5:"label";s:0:"";s:3:"url";s:0:"";s:5:"image";s:17:"fab fa-facebook-f";}i:10;a:3:{s:5:"label";s:0:"";s:3:"url";s:0:"";s:5:"image";s:16:"fab fa-pinterest";}i:11;a:3:{s:5:"label";s:0:"";s:3:"url";s:0:"";s:5:"image";s:15:"fab fa-snapchat";}i:12;a:3:{s:5:"label";s:0:"";s:3:"url";s:0:"";s:5:"image";s:17:"fab fa-soundcloud";}i:13;a:3:{s:5:"label";s:0:"";s:3:"url";s:0:"";s:5:"image";s:14:"fab fa-youtube";}}*/
     /**
      * @var     array<string, mixed>    $default_images
      */
