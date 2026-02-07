@@ -44,7 +44,7 @@ class Config
 {
     use TraitProcess;
 
-    /**
+     /**
      * @var     array<string, mixed>    $default_images
      */
     private static array $default_images = [];
