@@ -31,6 +31,7 @@ use Dotclear\Helper\Html\Form\Note;
 use Dotclear\Helper\Html\Form\Para;
 use Dotclear\Helper\Html\Form\Submit;
 use Dotclear\Helper\Html\Form\Table;
+use Dotclear\Helper\Html\Form\Text;
 use Dotclear\Helper\Html\Form\Tbody;
 use Dotclear\Helper\Html\Form\Td;
 use Dotclear\Helper\Html\Form\Th;
@@ -94,29 +95,15 @@ class Config
             return is_array($res) ? $res : [];
         };
 
-        self::$default_images = [
-            'resume_default_image_url'      => My::fileURL('/img/profile.jpg'),
-            'default_image_tb_url'          => My::fileURL('/images/.image-placeholder-1920x1080_s.jpg'),
-            'default_image_media_alt'       => '',
-            'default_small_image_url'       => My::fileURL('/images/image-placeholder-600x338.jpg'),
-            'default_small_image_tb_url'    => My::fileURL('/images/.image-placeholder-600x338_s.jpg'),
-            'default_small_image_media_alt' => '',
-            'images_disabled'               => false,
-        ];
         self::$default_style = [
-            'main_color'      => '#EA1010',
-            'main_dark_color' => '#F37C7C',
-            'mode'            => 'auto',
+            'main_color'               => '#bd5d38',
+            'resume_default_image_url' => My::fileURL('/img/profile.jpg'),
         ];
 
-        /*App::backend()->resume_default_image_url = My::fileURL('/img/profile.jpg');
+        # default or user defined images settings
+        self::$conf_style = array_merge(self::$default_style, $decode('style'));
 
-        $style = App::blog()->settings->themes->get(App::blog()->settings->system->theme . '_style');
-        $style = $style ? (unserialize($style) ?: []) : [];
-
-        if (!is_array($style)) {
-            $style = [];
-        }
+        /*
         if (!isset($style['resume_user_image']) || empty($style['resume_user_image'])) {
             $style['resume_user_image'] = App::backend()->resume_default_image_url;
         }
@@ -133,10 +120,6 @@ class Config
 
         // Load contextual help
         App::themes()->loadModuleL10Nresources(My::id(), App::lang()->getLang());
-
-        # default or user defined images settings
-        self::$conf_style  = array_merge(self::$default_style, $decode('style'));
-        self::$conf_images = array_merge(self::$default_images, $decode('images'));
 
         $stickers = $decode('stickers');
 
@@ -192,13 +175,18 @@ class Config
                 if (App::backend()->conf_tab === 'presentation') {
                     $style = [];
                     if (!empty($_POST['resume_user_image'])) {
-                        $style['resume_user_image'] = $_POST['resume_user_image'];
+                        self::$conf_style['resume_user_image'] = $_POST['resume_user_image'];
                     } else {
-                        $style['resume_user_image'] = App::backend()->resume_default_image_url;
+                        self::$conf_style['resume_user_image'] = self::$conf_style['resume_default_image_url'];
                     }
-                    $style['main_color'] = $_POST['main_color'];
 
-                    App::backend()->style = $style;
+                    if (isset($_POST['main_color'])) {
+                        self::$conf_style['main_color'] = $_POST['main_color'];
+                    }
+
+                    $encode('style');
+
+                    App::backend()->notices()->addSuccessNotice(__('Theme presentation has been updated.'));
                 } elseif (App::backend()->conf_tab === 'stickers') {
                     $stickers = [];
                     for ($i = 0; $i < count($_POST['sticker_image']); $i++) {
@@ -273,13 +261,23 @@ class Config
                         ->fields([
                             (new Para())->items([
                                 (new Img('resume_user_image'))
-                                    ->id('resume_user_image_src')
+                                    ->id('resume_user_image')
                                     ->class('img-profile')
-                                    ->src(self::$conf_images['resume_default_image_url'])
+                                    ->src(self::$conf_style['resume_user_image'])
                                     ->alt(__('Image URL:'))
                                     ->title('')
                                     ->width(240)
                                     ->height(160),
+                            ]),
+                            (new Para())->items([
+                                (new Button('resume_user_image_selector', __('Change')))
+                                    ->type('button')
+                                    ->id('resume_user_image_selector'),
+                                (new Text('span', ' ')),
+                                (new Button('resume_user_image_reset', __('Reset')))
+                                    ->class('delete')
+                                    ->type('button')
+                                    ->id('resume_user_image_reset'),
                             ]),
                         ]),
 

@@ -1,3 +1,11 @@
+.img-profile {
+    border-radius: 50%;
+    border: .5rem #c9c9c9 solid;
+    object-fit: cover;
+    width: 180px;
+    height: 180px;
+}
+
 img.svg {
     max-width: 1.8em;
     max-height: 1.8em;
