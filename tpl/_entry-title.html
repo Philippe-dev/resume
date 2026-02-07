@@ -3,7 +3,7 @@
 	<header>
 		<!-- # New day date -->
 		<tpl:DateHeader>
-			<p class="day-date"><time datetime="{{tpl:EntryDate iso8601="1"}}"><i class="far fa-calendar-alt"></i> {{tpl:EntryDate}}</time></p>
+			<p class="day-date"><time datetime="{{tpl:EntryDate iso8601="1"}}">{{tpl:EntryDate}}</time></p>
 		</tpl:DateHeader>
 
 		<h2 class="post-title"><a href="{{tpl:EntryURL}}">{{tpl:EntryTitle encode_html="1"}}</a></h2>
@@ -17,13 +17,13 @@
 
 	<footer class="post-meta">
 		<p class="post-info">
-			<span class="post-author"><i class="far fa-user"></i> {{tpl:EntryAuthorLink}}</span>
-			<span class="post-date"><time datetime="{{tpl:EntryDate iso8601="1"}}"><i class="far fa-calendar-alt"></i> {{tpl:EntryDate}}</time></span>
+			<span class="post-author">{{tpl:EntryAuthorLink}}</span>
+			<span class="post-date"><time datetime="{{tpl:EntryDate iso8601="1"}}">{{tpl:EntryDate}}</time></span>
 			<tpl:EntryIf has_category="1">
 				<tpl:EntryCategoriesBreadcrumb>
-					<span class="post-breadcrumb-cat"><a href="{{tpl:CategoryURL}}"><i class="far fa-folder"></i> {{tpl:CategoryTitle encode_html="1"}}</a></span> ›
+					<span class="post-breadcrumb-cat"><a href="{{tpl:CategoryURL}}">{{tpl:CategoryTitle encode_html="1"}}</a></span> ›
 				</tpl:EntryCategoriesBreadcrumb>
-				<span class="post-cat"><a href="{{tpl:EntryCategoryURL}}"><i class="far fa-folder"></i> {{tpl:EntryCategory encode_html="1"}}</a></span>
+				<span class="post-cat"><a href="{{tpl:EntryCategoryURL}}">{{tpl:EntryCategory encode_html="1"}}</a></span>
 			</tpl:EntryIf>
 		</p>
 		<!-- # Number of comments, trackbacks and attachments -->
@@ -31,12 +31,12 @@
 			<p class="post-info-co">
 		</tpl:EntryIf>
 		<tpl:EntryIf show_comments="1">
-				<a href="{{tpl:EntryURL}}#comments" class="comment_count"><i class="far fa-comments"></i> {{tpl:EntryCommentCount}}</a>
+				<a href="{{tpl:EntryURL}}#comments" class="comment_count">{{tpl:EntryCommentCount}}</a>
 		</tpl:EntryIf>
 		<tpl:EntryIf show_pings="1">
-				<a href="{{tpl:EntryURL}}#pings" class="ping_count"><i class="far fa-comment-dots"></i> {{tpl:EntryPingCount}}</a></tpl:EntryIf>
+				<a href="{{tpl:EntryURL}}#pings" class="ping_count">{{tpl:EntryPingCount}}</a></tpl:EntryIf>
 		<tpl:EntryIf has_attachment="1">
-				<a href="{{tpl:EntryURL}}#attachments" class="attach_count"><i class="fas fa-paperclip"></i> {{tpl:EntryAttachmentCount}}</a></tpl:EntryIf>
+				<a href="{{tpl:EntryURL}}#attachments" class="attach_count">{{tpl:EntryAttachmentCount}}</a></tpl:EntryIf>
 		<tpl:EntryIf operator="or" show_comments="1" show_pings="1" has_attachment="1">
 			</p>
 		</tpl:EntryIf>

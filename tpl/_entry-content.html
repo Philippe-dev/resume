@@ -4,13 +4,13 @@
 
 		<div class="post-meta">
 			<p class="post-info">
-				<span class="post-author"><i class="far fa-user"></i> {{tpl:EntryAuthorLink}}</span>
-				<span class="post-date"><time datetime="{{tpl:EntryDate iso8601="1"}}"><i class="far fa-calendar-alt"></i> {{tpl:EntryDate}}</time></span>
-				<span class="post-permalink"><a href="{{tpl:EntryURL}}"><i class="fas fa-link"></i> {{tpl:lang Permalink}}</a></span>
+				<span class="post-author">{{tpl:EntryAuthorLink}}</span>
+				<span class="post-date"><time datetime="{{tpl:EntryDate iso8601="1"}}">{{tpl:EntryDate}}</time></span>
+				<span class="post-permalink"><a href="{{tpl:EntryURL}}">{{tpl:lang Permalink}}</a></span>
 				<tpl:EntryIf has_category="1">
 					<span class="post-cat"><tpl:EntryCategoriesBreadcrumb><a
-					href="{{tpl:CategoryURL}}"><i class="far fa-folder"></i> {{tpl:CategoryTitle encode_html="1"}}</a> › </tpl:EntryCategoriesBreadcrumb><a
-					href="{{tpl:EntryCategoryURL}}"><i class="far fa-folder"></i> {{tpl:EntryCategory encode_html="1"}}</a></span>
+					href="{{tpl:CategoryURL}}">{{tpl:CategoryTitle encode_html="1"}}</a> › </tpl:EntryCategoriesBreadcrumb><a
+					href="{{tpl:EntryCategoryURL}}">{{tpl:EntryCategory encode_html="1"}}</a></span>
 				</tpl:EntryIf>
 			</p>
 
@@ -18,7 +18,7 @@
 				<tpl:TagsHeader>
 					<ul class="post-tags-list">
 				</tpl:TagsHeader>
-					<li class="post-tags-item"><a href="{{tpl:TagURL}}"><i class="fas fa-tag"></i> {{tpl:TagID}}</a></li>
+					<li class="post-tags-item"><a href="{{tpl:TagURL}}">{{tpl:TagID}}</a></li>
 				<tpl:TagsFooter>
 					</ul>
 				</tpl:TagsFooter>
