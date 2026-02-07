@@ -233,7 +233,9 @@ class Config
             return;
         }
 
-        echo '<div class="multi-part" id="themes-list' . (App::backend()->conf_tab === 'presentation' ? '' : '-presentation') . '" title="' . __('Presentation') . '">';
+        
+
+        /*echo '<div class="multi-part" id="themes-list' . (App::backend()->conf_tab === 'presentation' ? '' : '-presentation') . '" title="' . __('Presentation') . '">';
 
         echo '<form id="theme_config" action="' . App::backend()->url()->get('admin.blog.theme', ['conf' => '1']) .
             '" method="post" enctype="multipart/form-data">';
@@ -273,6 +275,7 @@ class Config
         echo '</form>';
 
         echo '</div>'; // Close tab
+        */
 
         //Stickers tab
         echo
