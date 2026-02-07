@@ -44,7 +44,6 @@ class Config
 {
     use TraitProcess;
 
-    /*a:14:{i:0;a:3:{s:5:"label";s:8:"Mastodon";s:3:"url";s:28:"https://piaille.fr/@dissitou";s:5:"image";s:15:"fab fa-mastodon";}i:1;a:3:{s:5:"label";s:0:"";s:3:"url";s:0:"";s:5:"image";s:15:"fab fa-diaspora";}i:2;a:3:{s:5:"label";s:9:"Instagram";s:3:"url";s:0:"";s:5:"image";s:16:"fab fa-instagram";}i:3;a:3:{s:5:"label";s:6:"GitHub";s:3:"url";s:31:"https://github.com/philippe-dev";s:5:"image";s:13:"fab fa-github";}i:4;a:3:{s:5:"label";s:11:"Syndication";s:3:"url";s:34:"https://www.dissitou.org/feed/atom";s:5:"image";s:10:"fas fa-rss";}i:5;a:3:{s:5:"label";s:6:"twitch";s:3:"url";s:1:"#";s:5:"image";s:13:"fab fa-twitch";}i:6;a:3:{s:5:"label";s:0:"";s:3:"url";s:0:"";s:5:"image";s:18:"fab fa-linkedin-in";}i:7;a:3:{s:5:"label";s:0:"";s:3:"url";s:0:"";s:5:"image";s:13:"fab fa-gitlab";}i:8;a:3:{s:5:"label";s:0:"";s:3:"url";s:0:"";s:5:"image";s:14:"fab fa-twitter";}i:9;a:3:{s:5:"label";s:0:"";s:3:"url";s:0:"";s:5:"image";s:17:"fab fa-facebook-f";}i:10;a:3:{s:5:"label";s:0:"";s:3:"url";s:0:"";s:5:"image";s:16:"fab fa-pinterest";}i:11;a:3:{s:5:"label";s:0:"";s:3:"url";s:0:"";s:5:"image";s:15:"fab fa-snapchat";}i:12;a:3:{s:5:"label";s:0:"";s:3:"url";s:0:"";s:5:"image";s:17:"fab fa-soundcloud";}i:13;a:3:{s:5:"label";s:0:"";s:3:"url";s:0:"";s:5:"image";s:14:"fab fa-youtube";}}*/
     /**
      * @var     array<string, mixed>    $default_images
      */
@@ -102,15 +101,6 @@ class Config
 
         # default or user defined images settings
         self::$conf_style = array_merge(self::$default_style, $decode('style'));
-
-        /*
-        if (!isset($style['resume_user_image']) || empty($style['resume_user_image'])) {
-            $style['resume_user_image'] = App::backend()->resume_default_image_url;
-        }
-
-        if (!isset($style['main_color'])) {
-            $style['main_color'] = '#bd5d38';
-        }*/
 
         self::$stickers_images = [];
 
@@ -279,6 +269,8 @@ class Config
                                     ->type('button')
                                     ->id('resume_user_image_reset'),
                             ]),
+                            (new Hidden('resume_user_image'))
+                            ->value(self::$conf_style['resume_user_image']),
                         ]),
 
                     (new Fieldset())->class('fieldset')
@@ -316,48 +308,6 @@ class Config
                 ]),
             ])
         ->render();
-
-        /*echo '<div class="multi-part" id="themes-list' . (App::backend()->conf_tab === 'presentation' ? '' : '-presentation') . '" title="' . __('Presentation') . '">';
-
-        echo '<form id="theme_config" action="' . App::backend()->url()->get('admin.blog.theme', ['conf' => '1']) .
-            '" method="post" enctype="multipart/form-data">';
-
-        echo '<div class="fieldset">';
-
-        echo '<h4 class="pretty-title">' . __('Profile image') . '</h4>';
-
-        echo '<div class="box theme">';
-
-        echo '<p> ' .
-        '<img id="resume_user_image_src" alt="' . __('Image URL:') . ' ' . App::backend()->style['resume_user_image'] .
-         '" src="' . App::backend()->style['resume_user_image'] . '" class="img-profile">' .
-         '</p>';
-
-        echo '<p class="resume-buttons"><button type="button" id="resume_user_image_selector">' . __('Change') . '</button>' .
-        '<button class="delete" type="button" id="resume_user_image_reset">' . __('Reset') . '</button>' .
-        '</p>' ;
-
-        echo '<p class="hidden-if-js">' . form::field('resume_user_image', 30, 255, App::backend()->style['resume_user_image']) . '</p>';
-
-        echo '</div>';
-        echo '</div>'; // Close fieldset
-
-        echo '<div class="fieldset">';
-
-        echo '<h4 class="pretty-title">' . __('Colors') . '</h4>';
-        echo '<p class="field maximal"><label for="main_color">' . __('Main color:') . '</label> ' .
-            form::color('main_color', 30, 255, App::backend()->style['main_color']) . '</p>' ;
-
-        echo '</div>'; // Close fieldset
-
-        echo '<p><input type="hidden" name="conf_tab" value="presentation"></p>';
-        echo '<p class="clear"><input type="submit" value="' . __('Save') . '">' . App::nonce()->getFormNonce() . '</p>';
-        echo form::hidden(['theme-url'], App::backend()->theme_url);
-
-        echo '</form>';
-
-        echo '</div>'; // Close tab
-        */
 
         //Stickers tab
         echo
