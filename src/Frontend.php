@@ -21,7 +21,7 @@ use Dotclear\Helper\Network\Http;
 class Frontend
 {
     use TraitProcess;
-    
+
     public static function init(): bool
     {
         return self::status(My::checkContext(My::FRONTEND));
@@ -221,44 +221,64 @@ class Frontend
         # Social media links
         $res = '';
 
-        $style = App::blog()->settings->themes->get(App::blog()->settings->system->theme . '_stickers');
+        $stickers = self::decode('stickers');
+        $stickers = array_filter($stickers, self::cleanSocialLinks(...));
 
-        if ($style === null) {
-            $default = true;
-        } else {
-            $style = $style ? (unserialize($style) ?: []) : [];
-
-            $style = array_filter($style, self::class . '::cleanSocialLinks');
-
-            $count = 0;
-            foreach ($style as $sticker) {
-                $res .= self::setSocialLink($count, ($count == count($style)), $sticker['label'], $sticker['url'], $sticker['image']);
-                $count++;
-            }
+        $count = 0;
+        foreach ($stickers as $sticker) {
+            $res .= self::setSocialLink($count, ($count == count($stickers)), $sticker['label'], $sticker['url'], $sticker['image']);
+            $count++;
         }
 
-        if ($res != '') {
-            return $res;
-        }
+        return $res;
     }
-    protected static function setSocialLink($position, $last, $label, $url, $image)
+    protected static function setSocialLink(int $position, bool $last, string $label, string $url, string $image): string
     {
+        $svgurl = My::path() . '/svg/' . $image;
+
+        $svgData = @file_get_contents($svgurl);
+        if ($svgData === false) {
+            die("Failed to fetch SVG from: $svgurl");
+        }
+
+        $svg = simplexml_load_string($svgData);
+        $svg->registerXPathNamespace('svg', 'http://www.w3.org/2000/svg');
+        $paths = $svg->xpath('//svg:path');
+        $d     = count($paths) ? $paths[0]['d'] : '';
+
         return
-            '<li><a class="social-icon" title="' . $label . '" href="' . $url . '"><span class="sr-only">' . $label . '</span>' .
-            '<i class="' . $image . '"></i>' .
-            '</a></li>' . "\n";
+            '<li><a class="social-icon" title="' . $label . '" href="' . $url . '">' .
+            '<span class="sr-only">' . $label . '</span>' .
+            '<svg class="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">' .
+            '<path fill="currentColor" d="' . $d . '" />' .
+            '</svg></a></li>' . "\n";
     }
 
-    protected static function cleanSocialLinks($style)
+    protected static function cleanSocialLinks(mixed $style): bool
     {
         if (is_array($style)) {
             if (isset($style['label']) && isset($style['url']) && isset($style['image'])) {
-                if ($style['label'] != null && $style['url'] != null && $style['image'] != null) {
+                if ($style['label'] && $style['url'] && $style['image']) {
                     return true;
                 }
             }
         }
 
         return false;
+    }
+
+    /**
+     * @return  array<string, mixed>
+     */
+    public static function decode(string $setting): array
+    {
+        $res = App::blog()->settings()->get('themes')->get(App::blog()->settings()->get('system')->get('theme') . '_' . $setting);
+        $res = $res ? (unserialize($res) ?: []) : [];
+
+        if (!is_array($res)) {
+            $res = [];
+        }
+
+        return $res;
     }
 }

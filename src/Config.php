@@ -15,18 +15,26 @@ namespace Dotclear\Theme\resume;
 use Dotclear\App;
 use Dotclear\Helper\Process\TraitProcess;
 use Dotclear\Helper\File\Files;
+use Dotclear\Helper\Html\Form\Button;
 use Dotclear\Helper\Html\Form\Caption;
+use Dotclear\Helper\Html\Form\Checkbox;
+use Dotclear\Helper\Html\Form\Color;
 use Dotclear\Helper\Html\Form\Div;
+use Dotclear\Helper\Html\Form\Fieldset;
 use Dotclear\Helper\Html\Form\Form;
 use Dotclear\Helper\Html\Form\Hidden;
 use Dotclear\Helper\Html\Form\Img;
 use Dotclear\Helper\Html\Form\Input;
+use Dotclear\Helper\Html\Form\Label;
+use Dotclear\Helper\Html\Form\Legend;
 use Dotclear\Helper\Html\Form\Note;
 use Dotclear\Helper\Html\Form\Para;
+use Dotclear\Helper\Html\Form\Radio;
 use Dotclear\Helper\Html\Form\Submit;
 use Dotclear\Helper\Html\Form\Table;
 use Dotclear\Helper\Html\Form\Tbody;
 use Dotclear\Helper\Html\Form\Td;
+use Dotclear\Helper\Html\Form\Text;
 use Dotclear\Helper\Html\Form\Th;
 use Dotclear\Helper\Html\Form\Thead;
 use Dotclear\Helper\Html\Form\Tr;
@@ -108,8 +116,6 @@ class Config
         ];
         self::$stickers_images = [];
 
-        // If you add stickers above, remember to add them in myTable function into titles array
-
         My::l10n('admin');
 
         App::backend()->standalone_config = (bool) App::themes()->moduleInfo(App::blog()->settings()->system->theme, 'standalone_config');
@@ -162,6 +168,13 @@ class Config
             return false;
         }
 
+        $encode = function (string $setting): void {
+            App::blog()->settings()->get('themes')->put(
+                App::blog()->settings()->get('system')->get('theme') . '_' . $setting,
+                serialize(self::${'conf_' . $setting})
+            );
+        };
+
         if (!empty($_POST)) {
             try {
                 // HTML
@@ -175,9 +188,7 @@ class Config
                     $style['main_color'] = $_POST['main_color'];
 
                     App::backend()->style = $style;
-                }
-
-                if (App::backend()->conf_tab === 'links') {
+                } elseif (App::backend()->conf_tab === 'stickers') {
                     $stickers = [];
                     for ($i = 0; $i < count($_POST['sticker_image']); $i++) {
                         $stickers[] = [
@@ -188,11 +199,13 @@ class Config
                     }
 
                     $order = [];
+
                     if (empty($_POST['ds_order']) && !empty($_POST['order'])) {
                         $order = $_POST['order'];
                         asort($order);
                         $order = array_keys($order);
                     }
+
                     if (!empty($order)) {
                         $new_stickers = [];
                         foreach ($order as $i => $k) {
@@ -204,18 +217,19 @@ class Config
                         }
                         $stickers = $new_stickers;
                     }
-                    App::backend()->stickers = $stickers;
-                }
-                App::blog()->settings->themes->put(App::blog()->settings->system->theme . '_style', serialize(App::backend()->style));
-                App::blog()->settings->themes->put(App::blog()->settings->system->theme . '_stickers', serialize(App::backend()->stickers));
 
+                    self::$conf_stickers = $stickers;
+                    $encode('stickers');
+
+                    App::backend()->notices()->addSuccessNotice(__('Theme stickers have been updated.'));
+                }
+                
                 // Blog refresh
                 App::blog()->triggerBlog();
 
                 // Template cache reset
                 App::cache()->emptyTemplatesCache();
 
-                App::backend()->notices()->message(__('Theme configuration upgraded.'), true, true);
             } catch (Exception $e) {
                 App::error()->add($e->getMessage());
             }
@@ -233,14 +247,66 @@ class Config
             return;
         }
 
-         //Presentation tab
+        //Presentation tab
         echo
         (new Div('presentation'))
             ->class('multi-part')
             ->title(__('Presentation'))
             ->items([
                 (new Form('theme_presentation'))
-        ])
+                ->action(App::backend()->url()->get('admin.blog.theme', ['conf' => '1', 'conf_tab' => 'presentation']) . '#presentation')
+                ->method('post')
+                ->fields([
+
+                    (new Fieldset())->class('fieldset')->legend((new Legend(__('Colors'))))->fields([
+                        
+                        (new Div())
+                            ->class('three-boxes')
+                            ->items([
+                                (new Para())->class('classic')->items([
+                                    (new Label(__('Light theme main color:'), Label::INSIDE_LABEL_BEFORE))->for('main_color'),
+                                    (new Color('main_color'))
+                                        ->size(30)
+                                        ->maxlength(255)
+                                        ->value(self::$conf_style['main_color']),
+                                ]),
+                            ]),
+                        (new Div())
+                            ->class('three-boxes')
+                            ->items([
+                                (new Para())->class('classic')->items([
+                                    (new Label(__('Dark theme main color:'), Label::INSIDE_LABEL_BEFORE))->for('main_dark_color'),
+                                    (new Color('main_dark_color'))
+                                        ->size(30)
+                                        ->maxlength(255)
+                                        ->value(self::$conf_style['main_dark_color']),
+                                ]),
+                            ]),
+                    ]),
+                    
+
+                    (new Para())->items([
+                        (new Input('base_url'))
+                            ->type('hidden')
+                            ->value(App::blog()->url()),
+                        (new Input('theme-url'))
+                            ->type('hidden')
+                            ->value(My::fileURL('')),
+                        (new Input('change-button-id'))
+                            ->type('hidden')
+                            ->value(''),
+                        (new Input('conf_tab'))
+                            ->id('conf_tab_presentation')
+                            ->type('hidden')
+                            ->value('presentation'),
+                    ]),
+                    (new Para())->items([
+                        (new Submit(['presentation'], __('Save presentation'))),
+                        App::nonce()->formNonce(),
+
+                    ]),
+                ]),
+            ])
         ->render();
 
         /*echo '<div class="multi-part" id="themes-list' . (App::backend()->conf_tab === 'presentation' ? '' : '-presentation') . '" title="' . __('Presentation') . '">';
