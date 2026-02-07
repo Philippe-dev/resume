@@ -257,30 +257,16 @@ class Config
                 ->action(App::backend()->url()->get('admin.blog.theme', ['conf' => '1', 'conf_tab' => 'presentation']) . '#presentation')
                 ->method('post')
                 ->fields([
-
-                    (new Fieldset())->class('fieldset')->legend((new Legend(__('Colors'))))->fields([
-                        
-                        (new Div())
-                            ->class('three-boxes')
-                            ->items([
-                                (new Para())->class('classic')->items([
-                                    (new Label(__('Light theme main color:'), Label::INSIDE_LABEL_BEFORE))->for('main_color'),
-                                    (new Color('main_color'))
-                                        ->size(30)
-                                        ->maxlength(255)
-                                        ->value(self::$conf_style['main_color']),
-                                ]),
-                            ]),
-                        (new Div())
-                            ->class('three-boxes')
-                            ->items([
-                                (new Para())->class('classic')->items([
-                                    (new Label(__('Dark theme main color:'), Label::INSIDE_LABEL_BEFORE))->for('main_dark_color'),
-                                    (new Color('main_dark_color'))
-                                        ->size(30)
-                                        ->maxlength(255)
-                                        ->value(self::$conf_style['main_dark_color']),
-                                ]),
+                    (new Fieldset())->class('fieldset')
+                    ->legend((new Legend(__('Colors'))))
+                    ->fields([                      
+                        (new Para())->class('classic')
+                        ->items([
+                            (new Label(__('Main color:'), Label::INSIDE_LABEL_BEFORE))->for('main_color'),
+                                (new Color('main_color'))
+                                ->size(30)
+                                ->maxlength(255)
+                                ->value(self::$conf_style['main_color']),
                             ]),
                     ]),
                     
