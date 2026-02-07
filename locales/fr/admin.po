@@ -22,6 +22,9 @@ msgstr "Les étiquettes du thème ont été mises à jour"
 msgid "Presentation"
 msgstr "Présentation"
 
+msgid "Save presentation"
+msgstr "Enregistrer la présentation"
+
 msgid "Profile image"
 msgstr "Image de profil"
 

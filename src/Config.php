@@ -23,6 +23,7 @@ use Dotclear\Helper\Html\Form\Div;
 use Dotclear\Helper\Html\Form\Fieldset;
 use Dotclear\Helper\Html\Form\Form;
 use Dotclear\Helper\Html\Form\Hidden;
+use Dotclear\Helper\Html\Form\Image;
 use Dotclear\Helper\Html\Form\Img;
 use Dotclear\Helper\Html\Form\Input;
 use Dotclear\Helper\Html\Form\Label;
@@ -257,20 +258,34 @@ class Config
                 ->action(App::backend()->url()->get('admin.blog.theme', ['conf' => '1', 'conf_tab' => 'presentation']) . '#presentation')
                 ->method('post')
                 ->fields([
-                    (new Fieldset())->class('fieldset')
-                    ->legend((new Legend(__('Colors'))))
-                    ->fields([                      
-                        (new Para())->class('classic')
-                        ->items([
-                            (new Label(__('Main color:'), Label::INSIDE_LABEL_BEFORE))->for('main_color'),
-                                (new Color('main_color'))
-                                ->size(30)
-                                ->maxlength(255)
-                                ->value(self::$conf_style['main_color']),
-                            ]),
-                    ]),
+                    (new Fieldset())
+                        ->class('fieldset')
+                        ->legend((new Legend(__('Profile image'))))
+                        ->fields([                      
+                            (new Para())->items([
+                                (new Img('resume_user_image'))
+                                    ->id('resume_user_image_src')
+                                    ->class('thumbnail')
+                                    ->src(self::$conf_style['resume_user_image'])
+                                    ->alt(__('Image URL:'))
+                                    ->title(self::$conf_images['resume_user_image'])
+                                    ->width(240)
+                                    ->height(160),
+                                ]),
+                        ]),    
                     
-
+                    (new Fieldset())->class('fieldset')
+                        ->legend((new Legend(__('Colors'))))
+                        ->fields([                      
+                            (new Para())->class('classic')
+                            ->items([
+                                (new Label(__('Main color:'), Label::INSIDE_LABEL_BEFORE))->for('main_color'),
+                                    (new Color('main_color'))
+                                    ->size(30)
+                                    ->maxlength(255)
+                                    ->value(self::$conf_style['main_color']),
+                                ]),
+                        ]),
                     (new Para())->items([
                         (new Input('base_url'))
                             ->type('hidden')
