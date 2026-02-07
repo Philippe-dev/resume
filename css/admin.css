@@ -1,28 +1,31 @@
-.img-profile {
-    border-radius: 50%;
-    border: .5rem #c9c9c9 solid;
-    object-fit: cover;
-    width: 180px;
-    height: 180px;
+img.svg {
+    max-width: 1.8em;
+    max-height: 1.8em;
 }
 
-.resume-buttons {
-    display: flex;
-    justify-content: space-evenly;
+@media (prefers-color-scheme: dark) {
+    img.svg {
+        filter: invert(1);
+    }
+
 }
 
-#theme_config .box img {
-    object-fit: cover;
+.thumbnail {
     background: var(--theme-img-background);
-	box-shadow: 0.9px 0.9px 2.2px rgba(0, 0, 0, 0.07), 2.1px 2.1px 5.3px rgba(0, 0, 0, 0.05), 4px 4px 10px rgba(0, 0, 0, 0.042), 7.1px 7.1px 17.9px rgba(0, 0, 0, 0.035), 13.4px 13.4px 33.4px rgba(0, 0, 0, 0.028), 32px 32px 80px rgba(0, 0, 0, 0.02);
+    box-shadow:
+        0.9px 0.9px 2.2px rgba(0, 0, 0, 0.07),
+        2.1px 2.1px 5.3px rgba(0, 0, 0, 0.05),
+        4px 4px 10px rgba(0, 0, 0, 0.042),
+        7.1px 7.1px 17.9px rgba(0, 0, 0, 0.035),
+        13.4px 13.4px 33.4px rgba(0, 0, 0, 0.028),
+        32px 32px 80px rgba(0, 0, 0, 0.02);
     border: 5px solid var(--theme-current-img-border);
 }
 
-#theme_config .svg-inline--fa {
-    font-size: 2em
+#theme_config .box.theme {
+    border: 0;
 }
 
-#theme_config .box.theme {
-	border: 0;
-    text-align: center;
+.box {
+    margin-right: 1em;
 }

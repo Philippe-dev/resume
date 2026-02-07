@@ -38,7 +38,6 @@ class Backend
             echo
             My::jsLoad('admin.js') . "\n" .
             My::jsLoad('popup_media.js') . "\n" .
-            My::jsLoad('fontawesome.js') . "\n" .
             My::cssLoad('admin.css') . "\n" ;
 
             App::auth()->user_prefs->addWorkspace('accessibility');

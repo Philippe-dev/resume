@@ -14,13 +14,66 @@ namespace Dotclear\Theme\resume;
 
 use Dotclear\App;
 use Dotclear\Helper\Process\TraitProcess;
+use Dotclear\Helper\File\Files;
+use Dotclear\Helper\Html\Form\Caption;
+use Dotclear\Helper\Html\Form\Div;
+use Dotclear\Helper\Html\Form\Form;
+use Dotclear\Helper\Html\Form\Hidden;
+use Dotclear\Helper\Html\Form\Img;
+use Dotclear\Helper\Html\Form\Input;
+use Dotclear\Helper\Html\Form\Note;
+use Dotclear\Helper\Html\Form\Para;
+use Dotclear\Helper\Html\Form\Submit;
+use Dotclear\Helper\Html\Form\Table;
+use Dotclear\Helper\Html\Form\Tbody;
+use Dotclear\Helper\Html\Form\Td;
+use Dotclear\Helper\Html\Form\Th;
+use Dotclear\Helper\Html\Form\Thead;
+use Dotclear\Helper\Html\Form\Tr;
+use Dotclear\Helper\Html\Html;
 use Exception;
-use form;
 
 class Config
 {
     use TraitProcess;
+
     
+    /**
+     * @var     array<string, mixed>    $default_images
+     */
+    private static array $default_images = [];
+    /**
+     * @var     array<string, mixed>    $conf_images
+     */
+    private static array $conf_images = [];
+
+    /**
+     * @var     array<string, mixed>    $default_style
+     */
+    private static array $default_style = [];
+    /**
+     * @var     array<string, mixed>    $conf_style
+     */
+    private static array $conf_style = [];
+
+    /**
+     * @var     array<string, mixed>    $default_featured
+     */
+    private static array $default_featured = [];
+    /**
+     * @var     array<string, mixed>    $conf_featured
+     */
+    private static array $conf_featured = [];
+
+    /**
+     * @var     array<int, string>    $stickers_images
+     */
+    private static array $stickers_images = [];
+    /**
+     * @var     array<int, mixed>    $conf_stickers
+     */
+    private static array $conf_stickers = [];
+
     public static function init(): bool
     {
         // limit to backend permissions
@@ -28,59 +81,74 @@ class Config
             return false;
         }
 
+        $decode = function (string $setting): array {
+            $res = App::blog()->settings()->get('themes')->get(App::blog()->settings()->get('system')->get('theme') . '_' . $setting);
+            $res = unserialize((string) $res) ?: [];
+
+            return is_array($res) ? $res : [];
+        };
+
+        // set default values
+        self::$default_images = [
+            'default_image_url'             => My::fileURL('/images/image-placeholder-1920x1080.jpg'),
+            'default_image_tb_url'          => My::fileURL('/images/.image-placeholder-1920x1080_s.jpg'),
+            'default_image_media_alt'       => '',
+            'default_small_image_url'       => My::fileURL('/images/image-placeholder-600x338.jpg'),
+            'default_small_image_tb_url'    => My::fileURL('/images/.image-placeholder-600x338_s.jpg'),
+            'default_small_image_media_alt' => '',
+            'images_disabled'               => false,
+        ];
+        self::$default_style = [
+            'main_color'      => '#EA1010',
+            'main_dark_color' => '#F37C7C',
+            'mode'            => 'auto',
+        ];
+        self::$default_featured = [
+            'featured_post_url' => '',
+        ];
+        self::$stickers_images = [];
+
+        // If you add stickers above, remember to add them in myTable function into titles array
+
         My::l10n('admin');
 
-        App::backend()->standalone_config = (bool) App::themes()->moduleInfo(App::blog()->settings->system->theme, 'standalone_config');
+        App::backend()->standalone_config = (bool) App::themes()->moduleInfo(App::blog()->settings()->system->theme, 'standalone_config');
 
         // Load contextual help
         App::themes()->loadModuleL10Nresources(My::id(), App::lang()->getLang());
 
-        App::backend()->resume_default_image_url = My::fileURL('/img/profile.jpg');
+        # default or user defined images settings
+        self::$conf_style    = array_merge(self::$default_style, $decode('style'));
+        self::$conf_images   = array_merge(self::$default_images, $decode('images'));
+        self::$conf_featured = array_merge(self::$default_featured, $decode('featured'));
+        $stickers            = $decode('stickers');
 
-        $style = App::blog()->settings->themes->get(App::blog()->settings->system->theme . '_style');
-        $style = $style ? (unserialize($style) ?: []) : [];
-
-        if (!is_array($style)) {
-            $style = [];
-        }
-        if (!isset($style['resume_user_image']) || empty($style['resume_user_image'])) {
-            $style['resume_user_image'] = App::backend()->resume_default_image_url;
-        }
-
-        if (!isset($style['main_color'])) {
-            $style['main_color'] = '#bd5d38';
-        }
-
-        $stickers = App::blog()->settings->themes->get(App::blog()->settings->system->theme . '_stickers');
-        $stickers = $stickers ? (unserialize($stickers) ?: []) : [];
-
-        $stickers_full = [];
         // Get all sticker images already used
-        if (is_array($stickers)) {
-            foreach ($stickers as $v) {
-                $stickers_full[] = $v['image'];
-            }
+        $stickers_full = [];
+        foreach ($stickers as $v) {
+            $stickers_full[] = $v['image'];
         }
-        // Get social media images
-        $stickers_images = ['fab fa-diaspora', 'fas fa-rss', 'fab fa-linkedin-in', 'fab fa-gitlab', 'fab fa-github', 'fab fa-twitter', 'fab fa-facebook-f',
-            'fab fa-instagram', 'fab fa-mastodon', 'fab fa-pinterest', 'fab fa-snapchat', 'fab fa-soundcloud', 'fab fa-youtube', ];
+
+        $svg_path = My::path() . '/svg/';
+
+        $stickers_images = Files::scandir($svg_path);
         if (is_array($stickers_images)) {
             foreach ($stickers_images as $v) {
-                if (!in_array($v, $stickers_full)) {
-                    // image not already used
-                    $stickers[] = [
-                        'label' => null,
-                        'url'   => null,
-                        'image' => $v, ];
+                if (preg_match('/^(.*)\.svg$/', $v)) {
+                    if (!in_array($v, $stickers_full)) {
+                        // image not already used
+                        $stickers[] = [
+                            'label' => preg_replace('/\.svg$/', '', $v),
+                            'url'   => null,
+                            'image' => $v];
+                    }
                 }
             }
         }
 
-        App::backend()->stickers  = $stickers;
-        App::backend()->style     = $style;
-        App::backend()->theme_url = My::fileURL('');
+        self::$conf_stickers = $stickers;
 
-        App::backend()->conf_tab = $_POST['conf_tab'] ?? 'presentation';
+        App::backend()->conf_tab = $_POST['conf_tab'] ?? ($_GET['conf_tab'] ?? 'presentation');
 
         return self::status();
     }
@@ -165,103 +233,118 @@ class Config
             return;
         }
 
-        if (!App::backend()->standalone_config) {
-            echo '</form>';
-        }
-
-        echo '<div class="multi-part" id="themes-list' . (App::backend()->conf_tab === 'presentation' ? '' : '-presentation') . '" title="' . __('Presentation') . '">';
-
-        echo '<form id="theme_config" action="' . App::backend()->url()->get('admin.blog.theme', ['conf' => '1']) .
-            '" method="post" enctype="multipart/form-data">';
-
-        echo '<div class="fieldset">';
-
-        echo '<h4 class="pretty-title">' . __('Profile image') . '</h4>';
-
-        echo '<div class="box theme">';
-
-        echo '<p> ' .
-        '<img id="resume_user_image_src" alt="' . __('Image URL:') . ' ' . App::backend()->style['resume_user_image'] .
-         '" src="' . App::backend()->style['resume_user_image'] . '" class="img-profile">' .
-         '</p>';
-
-        echo '<p class="resume-buttons"><button type="button" id="resume_user_image_selector">' . __('Change') . '</button>' .
-        '<button class="delete" type="button" id="resume_user_image_reset">' . __('Reset') . '</button>' .
-        '</p>' ;
-
-        echo '<p class="hidden-if-js">' . form::field('resume_user_image', 30, 255, App::backend()->style['resume_user_image']) . '</p>';
-
-        echo '</div>';
-        echo '</div>'; // Close fieldset
-
-        echo '<div class="fieldset">';
-
-        echo '<h4 class="pretty-title">' . __('Colors') . '</h4>';
-        echo '<p class="field maximal"><label for="main_color">' . __('Main color:') . '</label> ' .
-            form::color('main_color', 30, 255, App::backend()->style['main_color']) . '</p>' ;
-
-        echo '</div>'; // Close fieldset
-
-        echo '<p><input type="hidden" name="conf_tab" value="presentation"></p>';
-        echo '<p class="clear"><input type="submit" value="' . __('Save') . '">' . App::nonce()->getFormNonce() . '</p>';
-        echo form::hidden(['theme-url'], App::backend()->theme_url);
-
-        echo '</form>';
-
-        echo '</div>'; // Close tab
-
-        echo '<div class="multi-part" id="themes-list' . (App::backend()->conf_tab === 'links' ? '' : '-links') . '" title="' . __('Stickers') . '">';
-        echo '<form id="theme_config" action="' . App::backend()->url()->get('admin.blog.theme', ['conf' => '1']) .
-            '" method="post" enctype="multipart/form-data">';
-
-        echo '<div class="fieldset">';
-
-        echo '<h4 class="pretty-title">' . __('Social links') . '</h4>';
-
+        //Stickers tab
         echo
-        '<div class="table-outer">' .
-        '<table class="dragable">' . '<caption class="sr-only">' . __('Social links (header)') . '</caption>' .
-        '<thead>' .
-        '<tr>' .
-        '<th scope="col">' . '</th>' .
-        '<th scope="col">' . __('Image') . '</th>' .
-        '<th scope="col">' . __('Label') . '</th>' .
-        '<th scope="col">' . __('URL') . '</th>' .
-            '</tr>' .
-            '</thead>' .
-            '<tbody id="stickerslist">';
-        $count = 0;
-        foreach (App::backend()->stickers as $i => $v) {
-            $count++;
-            $v['service'] = str_replace('-link.png', '', $v['image']);
-            echo
-            '<tr class="line" id="l_' . $i . '">' .
-            '<td class="handle">' . form::number(['order[' . $i . ']'], [
-                'min'     => 0,
-                'max'     => count(App::backend()->stickers),
-                'default' => $count,
-                'class'   => 'position',
-            ]) .
-            form::hidden(['dynorder[]', 'dynorder-' . $i], $i) . '</td>' .
-            '<td class="linkimg">' . form::hidden(['sticker_image[]'], $v['image']) . '<i class="' . $v['image'] . '" title="' . $v['label'] . '"></i> ' . '</td>' .
-            '<td scope="row">' . form::field(['sticker_label[]', 'dsl-' . $i], 20, 255, $v['label']) . '</td>' .
-            '<td>' . form::field(['sticker_url[]', 'dsu-' . $i], 40, 255, $v['url']) . '</td>' .
-                '</tr>';
-        }
-        echo
-            '</tbody>' .
-            '</table></div>';
-        echo '</div>'; // Close fieldset
-        echo '<p><input type="hidden" name="conf_tab" value="links"></p>';
-        echo '<p class="clear">' . form::hidden('ds_order', '') . '<input type="submit" value="' . __('Save') . '">' . App::nonce()->getFormNonce() . '</p>';
-        echo '</form>';
+        (new Div('stickers'))
+            ->class('multi-part')
+            ->title(__('Stickers'))
+            ->items([
+                (new Form('theme_links'))
+                ->action(App::backend()->url()->get('admin.blog.theme', ['conf' => '1', 'conf_tab' => 'stickers']) . '#stickers')
+                ->method('post')
+                ->fields([
+                    ... self::myTable(),
+                    (new Para())->items([
+                        (new Input('conf_tab'))
+                            ->id('conf_tab_stickers')
+                            ->type('hidden')
+                            ->value('stickers'),
+                    ]),
+                    (new Note())
+                            ->class(['form-note', 'hidden-if-js', 'clear', 'table-note'])
+                            ->text(__('To rearrange stickers order, change number at the begining of the line, then click on “Save stickers” button.')),
+                    (new Note())
+                        ->class(['form-note', 'hidden-if-no-js', 'clear', 'table-note'])
+                        ->text(__('To rearrange stickers order, move items by drag and drop, then click on “Save stickers” button.')),
 
-        echo '</div>'; // Close tab
+                    (new Para())->items([
+                        (new Submit(['stickers'], __('Save stickers'))),
+                        App::nonce()->formNonce(),
+                    ]),
+                ]),
+            ])
+        ->render();
+
         App::backend()->page()->helpBlock('resume');
+    }
 
-        // Legacy mode
-        if (!App::backend()->standalone_config) {
-            echo '<form style="display:none">';
-        }
+    /**
+     * @brief Stickers settings
+     *
+     * @return  array<int, Table>
+     */
+    public static function myTable(): array
+    {
+        $count = 0;
+
+        $fields = [
+            (new Table())
+                ->class('dragable')
+                ->extra('aria-describedby="table-note"')
+                ->caption((new Caption(__('Social links (header)')))->class('pretty-title'))
+                ->items([
+                    (new Thead())->items([
+                        (new Tr())->items([
+                            (new Th())->text(''),
+                            (new Th())->text(__('Image')),
+                            (new Th())->scope('row')->text(__('Label')),
+                            (new Th())->text(__('URL')),
+                        ]),
+                    ]),
+                    (new Tbody())->id('stickerslist')->items(
+                        array_map(function ($i, $v) use (&$count) {
+                            $count++;
+
+                            return (new Tr())
+                                ->class('line')
+                                ->id('l_' . $i)
+                                ->items([
+                                    (new Td())->class('handle')->items([
+                                        (new Hidden('order[' . $i . ']'))
+                                            ->min(0)
+                                            ->max(count(self::$conf_stickers))
+                                            ->value($count)
+                                            ->class('position'),
+                                        (new Hidden('dynorder[]'))
+                                            ->id('dynorder[' . $i . ']')
+                                            ->value($i),
+                                        (new Hidden('dynorder-' . $i))->value($i),
+                                        (new Hidden('ds_order'))
+                                            ->id('ds_order[' . $i . ']')
+                                            ->value(''),
+                                    ]),
+                                    (new Td())->class('linkimg')->title($v['label'])->items([
+                                        (new Hidden('sticker_image[]'))
+                                            ->id('sticker_image[' . $i . ']')
+                                            ->value($v['image']),
+                                        (new Img('image[' . $i . ']'))
+                                            ->class('svg')
+                                            ->src(My::fileURL('/svg/' . $v['image']))
+                                            ->alt($v['label'])
+                                            ->title($v['label']),
+                                    ]),
+                                    (new Td())->items([
+                                        (new Input('sticker_label[]'))
+                                            ->id('sticker_label[' . $i . ']')
+                                            ->size(20)
+                                            ->maxlength(255)
+                                            ->value($v['label'] ?? '')
+                                            ->title(empty($v['label']) ? $v['label'] : $v['label']),
+                                    ]),
+                                    (new Td())->items([
+                                        (new Input('sticker_url[]'))
+                                            ->id('sticker_url[' . $i . ']')
+                                            ->size(40)
+                                            ->maxlength(255)
+                                            ->value($v['url'] ?? '')
+                                            ->title(empty($v['url']) ? __('Your URL:') : $v['url']),
+                                    ]),
+                                ]);
+                        }, array_keys(self::$conf_stickers), self::$conf_stickers)
+                    ),
+                ]),
+        ];
+
+        return $fields;
     }
 }
