@@ -17,7 +17,6 @@ use Dotclear\Helper\Process\TraitProcess;
 use Dotclear\Helper\File\Files;
 use Dotclear\Helper\Html\Form\Button;
 use Dotclear\Helper\Html\Form\Caption;
-use Dotclear\Helper\Html\Form\Checkbox;
 use Dotclear\Helper\Html\Form\Color;
 use Dotclear\Helper\Html\Form\Div;
 use Dotclear\Helper\Html\Form\Fieldset;
@@ -30,12 +29,10 @@ use Dotclear\Helper\Html\Form\Label;
 use Dotclear\Helper\Html\Form\Legend;
 use Dotclear\Helper\Html\Form\Note;
 use Dotclear\Helper\Html\Form\Para;
-use Dotclear\Helper\Html\Form\Radio;
 use Dotclear\Helper\Html\Form\Submit;
 use Dotclear\Helper\Html\Form\Table;
 use Dotclear\Helper\Html\Form\Tbody;
 use Dotclear\Helper\Html\Form\Td;
-use Dotclear\Helper\Html\Form\Text;
 use Dotclear\Helper\Html\Form\Th;
 use Dotclear\Helper\Html\Form\Thead;
 use Dotclear\Helper\Html\Form\Tr;
@@ -97,9 +94,8 @@ class Config
             return is_array($res) ? $res : [];
         };
 
-        // set default values
         self::$default_images = [
-            'default_image_url'             => My::fileURL('/images/image-placeholder-1920x1080.jpg'),
+            'resume_default_image_url'      => My::fileURL('/img/profile.jpg'),
             'default_image_tb_url'          => My::fileURL('/images/.image-placeholder-1920x1080_s.jpg'),
             'default_image_media_alt'       => '',
             'default_small_image_url'       => My::fileURL('/images/image-placeholder-600x338.jpg'),
@@ -112,9 +108,23 @@ class Config
             'main_dark_color' => '#F37C7C',
             'mode'            => 'auto',
         ];
-        self::$default_featured = [
-            'featured_post_url' => '',
-        ];
+
+        /*App::backend()->resume_default_image_url = My::fileURL('/img/profile.jpg');
+
+        $style = App::blog()->settings->themes->get(App::blog()->settings->system->theme . '_style');
+        $style = $style ? (unserialize($style) ?: []) : [];
+
+        if (!is_array($style)) {
+            $style = [];
+        }
+        if (!isset($style['resume_user_image']) || empty($style['resume_user_image'])) {
+            $style['resume_user_image'] = App::backend()->resume_default_image_url;
+        }
+
+        if (!isset($style['main_color'])) {
+            $style['main_color'] = '#bd5d38';
+        }*/
+
         self::$stickers_images = [];
 
         My::l10n('admin');
@@ -125,10 +135,10 @@ class Config
         App::themes()->loadModuleL10Nresources(My::id(), App::lang()->getLang());
 
         # default or user defined images settings
-        self::$conf_style    = array_merge(self::$default_style, $decode('style'));
-        self::$conf_images   = array_merge(self::$default_images, $decode('images'));
-        self::$conf_featured = array_merge(self::$default_featured, $decode('featured'));
-        $stickers            = $decode('stickers');
+        self::$conf_style  = array_merge(self::$default_style, $decode('style'));
+        self::$conf_images = array_merge(self::$default_images, $decode('images'));
+
+        $stickers = $decode('stickers');
 
         // Get all sticker images already used
         $stickers_full = [];
@@ -224,13 +234,12 @@ class Config
 
                     App::backend()->notices()->addSuccessNotice(__('Theme stickers have been updated.'));
                 }
-                
+
                 // Blog refresh
                 App::blog()->triggerBlog();
 
                 // Template cache reset
                 App::cache()->emptyTemplatesCache();
-
             } catch (Exception $e) {
                 App::error()->add($e->getMessage());
             }
@@ -261,30 +270,30 @@ class Config
                     (new Fieldset())
                         ->class('fieldset')
                         ->legend((new Legend(__('Profile image'))))
-                        ->fields([                      
+                        ->fields([
                             (new Para())->items([
                                 (new Img('resume_user_image'))
                                     ->id('resume_user_image_src')
-                                    ->class('thumbnail')
-                                    ->src(self::$conf_style['resume_user_image'])
+                                    ->class('img-profile')
+                                    ->src(self::$conf_images['resume_default_image_url'])
                                     ->alt(__('Image URL:'))
-                                    ->title(self::$conf_images['resume_user_image'])
+                                    ->title('')
                                     ->width(240)
                                     ->height(160),
-                                ]),
-                        ]),    
-                    
+                            ]),
+                        ]),
+
                     (new Fieldset())->class('fieldset')
                         ->legend((new Legend(__('Colors'))))
-                        ->fields([                      
+                        ->fields([
                             (new Para())->class('classic')
                             ->items([
                                 (new Label(__('Main color:'), Label::INSIDE_LABEL_BEFORE))->for('main_color'),
-                                    (new Color('main_color'))
-                                    ->size(30)
-                                    ->maxlength(255)
-                                    ->value(self::$conf_style['main_color']),
-                                ]),
+                                (new Color('main_color'))
+                                ->size(30)
+                                ->maxlength(255)
+                                ->value(self::$conf_style['main_color']),
+                            ]),
                         ]),
                     (new Para())->items([
                         (new Input('base_url'))
