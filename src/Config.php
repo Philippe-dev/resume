@@ -260,8 +260,8 @@ class Config
                         ->legend((new Legend(__('Profile image'))))
                         ->fields([
                             (new Para())->items([
-                                (new Img('resume_user_image'))
-                                    ->id('resume_user_image')
+                                (new Img('resume_user_image_src'))
+                                    ->id('resume_user_image_src')
                                     ->class('img-profile')
                                     ->src(self::$conf_style['resume_user_image'])
                                     ->alt(__('Image URL:'))
