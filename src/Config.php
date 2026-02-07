@@ -233,7 +233,15 @@ class Config
             return;
         }
 
-        
+         //Presentation tab
+        echo
+        (new Div('presentation'))
+            ->class('multi-part')
+            ->title(__('Presentation'))
+            ->items([
+                (new Form('theme_presentation'))
+        ])
+        ->render();
 
         /*echo '<div class="multi-part" id="themes-list' . (App::backend()->conf_tab === 'presentation' ? '' : '-presentation') . '" title="' . __('Presentation') . '">';
 
