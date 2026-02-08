@@ -197,7 +197,7 @@ class Frontend
 
     public static function resumeUserImageSrcHelper()
     {
-        $resume_default_image_url = My::fileURL('img/profile.jpg');
+        $resume_default_image_url = My::fileURL('/img/profile.jpg');
 
         $style = App::blog()->settings->themes->get(App::blog()->settings->system->theme . '_style');
         $style = $style ? (unserialize($style) ?: []) : [];
