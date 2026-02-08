@@ -1,6 +1,6 @@
 # Resume
 
-![Release 5.0](https://img.shields.io/badge/Release-5.0-b7d7ee)
+![Release 6.0](https://img.shields.io/badge/Release-6.0-b7d7ee)
 ![License MIT](https://img.shields.io/badge/License-MIT-a5cc52)
 ![Dotclear 2.36](https://img.shields.io/badge/Dotclear-2.36-137bbb)
 
