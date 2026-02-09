@@ -525,8 +525,6 @@ ul.post-tags-list li {
   vertical-align: top;
   font-variant: small-caps;
   height: 2em;
-  -webkit-transition: all .3s ease-in-out;
-  -moz-transition: all .3s ease-in-out;
   transition: all .3s ease-in-out;
   font-weight: bold;
 }
@@ -563,8 +561,6 @@ button.submit {
   border: none;
   padding: 5px 10px;
   text-transform: uppercase;
-  -webkit-transition: all .3s ease-in-out;
-  -moz-transition: all .3s ease-in-out;
   transition: all .3s ease-in-out;
   color: #fff;
   background-color: var(--bs-primary);
