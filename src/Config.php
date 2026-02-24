@@ -44,15 +44,6 @@ class Config
 {
     use TraitProcess;
 
-     /**
-     * @var     array<string, mixed>    $default_images
-     */
-    private static array $default_images = [];
-    /**
-     * @var     array<string, mixed>    $conf_images
-     */
-    private static array $conf_images = [];
-
     /**
      * @var     array<string, mixed>    $default_style
      */
@@ -61,15 +52,6 @@ class Config
      * @var     array<string, mixed>    $conf_style
      */
     private static array $conf_style = [];
-
-    /**
-     * @var     array<string, mixed>    $default_featured
-     */
-    private static array $default_featured = [];
-    /**
-     * @var     array<string, mixed>    $conf_featured
-     */
-    private static array $conf_featured = [];
 
     /**
      * @var     array<int, string>    $stickers_images
