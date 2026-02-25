@@ -84,6 +84,10 @@ class Config
         # default or user defined images settings
         self::$conf_style = array_merge(self::$default_style, $decode('style'));
 
+        if (!isset(self::$conf_style['resume_user_image'])) {
+            self::$conf_style['resume_user_image'] = self::$default_style['resume_default_image_url'];
+        }
+
         self::$stickers_images = [];
 
         My::l10n('admin');
