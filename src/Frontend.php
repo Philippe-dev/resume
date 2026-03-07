@@ -37,10 +37,10 @@ class Frontend
         My::l10n('main');
 
         # Templates
-        App::frontend()->template()->addValue('ResumeSimpleMenu', [self::class, 'resumeSimpleMenu']);
-        App::frontend()->template()->addValue('resumeUserColors', [self::class, 'resumeUserColors']);
-        App::frontend()->template()->addValue('resumeUserImageSrc', [self::class, 'resumeUserImageSrc']);
-        App::frontend()->template()->addValue('resumeSocialLinks', [self::class, 'resumeSocialLinks']);
+        App::frontend()->template()->addValue('ResumeSimpleMenu', self::resumeSimpleMenu(...));
+        App::frontend()->template()->addValue('resumeUserColors', self::resumeUserColors(...));
+        App::frontend()->template()->addValue('resumeUserImageSrc', self::resumeUserImageSrc(...));
+        App::frontend()->template()->addValue('resumeSocialLinks', self::resumeSocialLinks(...));
 
         return true;
     }
@@ -168,7 +168,7 @@ class Frontend
         return '<?php echo ' . self::class . '::resumeUserColorsHelper(); ?>';
     }
 
-    public static function resumeUserColorsHelper()
+    public static function resumeUserColorsHelper(): string
     {
         $style = App::blog()->settings->themes->get(App::blog()->settings->system->theme . '_style');
         $style = $style ? (unserialize($style) ?: []) : [];
@@ -182,20 +182,23 @@ class Frontend
 
         $main_color = $style['main_color'];
 
+        $colors = '';
+
         if ($main_color != '#bd5d38') {
-            return
-            '<style type="text/css">' . "\n" .
+            $colors = '<style type="text/css">' . "\n" .
             ':root {--bs-primary: ' . $main_color . '}' . "\n" .
             '</style>' . "\n";
         }
+
+        return $colors;
     }
 
-    public static function resumeUserImageSrc($attr)
+    public static function resumeUserImageSrc(): string
     {
         return '<?php echo ' . self::class . '::resumeUserImageSrcHelper(); ?>';
     }
 
-    public static function resumeUserImageSrcHelper()
+    public static function resumeUserImageSrcHelper(): string
     {
         $resume_default_image_url = My::fileURL('/img/profile.jpg');
 
@@ -212,11 +215,11 @@ class Frontend
         return $style['resume_user_image'];
     }
 
-    public static function resumeSocialLinks($attr)
+    public static function resumeSocialLinks(): string
     {
         return '<?php echo ' . self::class . '::resumeSocialLinksHelper(); ?>';
     }
-    public static function resumeSocialLinksHelper()
+    public static function resumeSocialLinksHelper(): string
     {
         # Social media links
         $res = '';
