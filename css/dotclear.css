@@ -134,6 +134,13 @@ p.post-info span {
   padding: 2px;
 }
 
+figcaption {
+  font-style: italic;
+  font-size: .9em;
+  margin: .5em 1em;
+  text-align: center;
+}
+
 blockquote {
   font-size: 0.9em;
   line-height: 1.33;
@@ -589,6 +596,10 @@ button.submit:hover {
   object-fit: cover;
   width: 15rem;
   height: 15rem;
+}
+
+.bc-separator {
+  margin: 0 .3em
 }
 
 /* COLOR SWITCHER */

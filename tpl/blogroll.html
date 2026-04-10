@@ -1,0 +1,42 @@
+{{tpl:extends parent="__layout.html"}}
+
+<tpl:Block name="head-title">
+    <title>{{tpl:BlogrollPageTitle}} - {{tpl:BlogName encode_html="1"}}</title>
+</tpl:Block>
+
+<tpl:Block name="meta-robots">
+    <meta name="ROBOTS" content="{{tpl:BlogMetaRobots robots="NOINDEX,NOARCHIVE"}}">
+</tpl:Block>
+
+<tpl:Block name="head-linkrel">
+    <link rel="contents" title="{{tpl:lang Archives}}" href="{{tpl:BlogArchiveURL}}">
+    <link rel="alternate" type="application/atom+xml" title="Atom 1.0" href="{{tpl:BlogFeedURL type="atom"}}">
+</tpl:Block>
+
+<tpl:Block name="body-tag">
+
+    <body id="page-top" class="dc-blogroll">
+</tpl:Block>
+
+<tpl:Block name="main-content">
+    <header id="content-info">
+        <h2>{{tpl:BlogrollPageTitle}}</h2>
+        {{tpl:BlogrollPageHeader}}
+    </header>
+
+    <article class="content-inner">
+        <tpl:BlogrollPage>
+            <tpl:BlogrollPageIfCategoryTitle>
+                <h3>{{tpl:BlogrollPageCategoryTitle}}</h3>
+            </tpl:BlogrollPageIfCategoryTitle>
+        
+            <tpl:BlogrollPageLinks>
+                <h4>{{tpl:BlogrollPageLink}}</h4>
+                <tpl:BlogrollPageIfLinkDesc>
+                    <p>{{tpl:BlogrollPageLinkDesc}}</p>
+                </tpl:BlogrollPageIfLinkDesc>
+            </tpl:BlogrollPageLinks>
+        
+        </tpl:BlogrollPage>
+    </article> <!-- # End #content-inner -->
+</tpl:Block>
