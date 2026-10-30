@@ -8,17 +8,19 @@
  * @author Philippe aka amalgame and contributors
  * @copyright GPL-2.0
  */
-$this->registerModule(
-    'Resume',
-    'A simple Bootstrap 5 blog theme',
-    'Philippe aka amalgame and contributors',
-    '6.3',
-    [
-        'date'        => '2026-04-10T00:00:18+0100',
-        'requires'    => [['core', '2.36']],
-        'standalone_config' => true,
-        'type'              => 'theme',
-        'tplset'            => 'dotty',
-        'overload'          => true,
-    ]
-);
+if (isset($this) && is_object($this) && method_exists($this, 'registerModule') && isset($this->id) && is_string($this->id)) {
+    $this->registerModule(
+        'Resume',
+        'A simple Bootstrap 5 blog theme',
+        'Philippe aka amalgame and contributors',
+        '6.4',
+        [
+            'date'              => '2026-10-30T00:00:18+0100',
+            'requires'          => [['core', '2.39']],
+            'standalone_config' => true,
+            'type'              => 'theme',
+            'tplset'            => 'dotty',
+            'overload'          => true,
+        ]
+    );
+}

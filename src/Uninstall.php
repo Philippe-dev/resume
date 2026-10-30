@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * @brief Resume, a theme for Dotclear 2
  *
  * @package Dotclear
@@ -8,6 +8,7 @@
  * @author Philippe aka amalgame and contributors
  * @copyright GPL-2.0
  */
+
 declare(strict_types=1);
 
 namespace Dotclear\Theme\resume;
@@ -19,7 +20,7 @@ use Dotclear\Plugin\Uninstaller\Uninstaller;
 class Uninstall
 {
     use TraitProcess;
-    
+
     public static function init(): bool
     {
         return self::status(My::checkContext(My::UNINSTALL));
@@ -40,7 +41,7 @@ class Uninstall
         // $var   = My::id(); // Var sub-folder
 
         // Database table name
-        // $table = dcCore::app()->prefix . 'resume';
+        // $table = App::con()->prefix() . 'resume';
 
         $user_actions = [
 
