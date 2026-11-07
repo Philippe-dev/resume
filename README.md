@@ -1,8 +1,8 @@
 # Resume
 
-![Release 6.5](https://img.shields.io/badge/Release-6.5-b7d7ee)
+![Release 6.6](https://img.shields.io/badge/Release-6.6-b7d7ee)
 ![License MIT](https://img.shields.io/badge/License-MIT-a5cc52)
-![Dotclear 2.39](https://img.shields.io/badge/Dotclear-2.39-137bbb)
+![Dotclear 2.40](https://img.shields.io/badge/Dotclear-2.40-137bbb)
 
 ## Crédits
 

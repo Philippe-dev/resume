@@ -13,10 +13,10 @@ if (isset($this) && is_object($this) && method_exists($this, 'registerModule') &
         'Resume',
         'A simple Bootstrap 5 blog theme',
         'Philippe aka amalgame and contributors',
-        '6.5',
+        '6.6',
         [
             'date'              => '2026-11-07T00:00:18+0100',
-            'requires'          => [['core', '2.39']],
+            'requires'          => [['core', '2.40']],
             'standalone_config' => true,
             'type'              => 'theme',
             'tplset'            => 'dotty',
