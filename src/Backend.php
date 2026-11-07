@@ -14,11 +14,12 @@ namespace Dotclear\Theme\resume;
 
 use Dotclear\App;
 use Dotclear\Helper\Process\TraitProcess;
+use Dotclear\Process\Backend\MediaItem;
 
 class Backend
 {
     use TraitProcess;
-    
+
     public static function init(): bool
     {
         return self::status(My::checkContext(My::BACKEND));
@@ -30,22 +31,33 @@ class Backend
             return false;
         }
 
-        App::behavior()->addBehavior('adminPageHTMLHead', function () {
-            if (App::blog()->settings->system->theme !== My::id()) {
-                return;
+        App::behavior()->addBehavior('adminPageHTMLHead', function (): string {
+            $theme = App::blog()->settings()->get('system')->getStr('theme', false);
+            if ($theme !== My::id()) {
+                return '';
             }
 
-            echo
-            My::jsLoad('admin.js') . "\n" .
-            My::jsLoad('popup_media.js') . "\n" .
-            My::cssLoad('admin.css') . "\n" ;
+            if (App::task()->checkContext('MODULE') && App::task()->checkContext('THEME_CONFIG')) {
+                if (!App::auth()->prefs()->get('accessibility')->getBool('nodragdrop', false)) {
+                    echo
+                    App::backend()->page()->jsLoad('js/jquery/jquery-ui.custom.js') .
+                    App::backend()->page()->jsLoad('js/jquery/jquery.ui.touch-punch.js');
+                }
 
-            App::auth()->user_prefs->addWorkspace('accessibility');
-            if (!App::auth()->user_prefs->accessibility->nodragdrop) {
                 echo
-                App::backend()->page()->jsLoad('js/jquery/jquery-ui.custom.js') .
-                App::backend()->page()->jsLoad('js/jquery/jquery.ui.touch-punch.js');
+                My::jsLoad('admin.js') . "\n" .
+                My::cssLoad('admin.css') . "\n" ;
             }
+
+            if (!App::task()->checkContext('MODULE')
+                && App::backend()->isPopup()    // Current opened page is a popup
+                && MediaItem::isPopup()         // Current popup is media item
+            ) {
+                echo
+                My::jsLoad('popup_media.js') . "\n";
+            }
+
+            return '';
         });
 
         return true;
